@@ -1146,11 +1146,16 @@ function positionFor(id){
   return { shares: Math.max(shares,0), invested: Math.max(invested,0), realizedPL, soldProceeds };
 }
 
+// Precios medios exactos del Excel
+const EXACT_AVG_PRICES = {"msci":105.330,"sp500":575.72,"gold":69.77,"silver":57.52,"nasdaq":1221.08,"defense":53.96,"platinum":25.67,"asia":229.70};
+const EXACT_SHARES = {"msci":54.447705,"sp500":2.716621,"gold":18.930974,"silver":8.03831,"nasdaq":0.330035,"defense":5.084142,"platinum":9.81826,"asia":1.985184};
+
 function avgBuyPrice(id){
+  if(EXACT_AVG_PRICES[id] !== undefined) return EXACT_AVG_PRICES[id];
   const buys = buysFor(id);
   if(buys.length===0) return 0;
   let totalShares=0, totalCost=0;
-  buys.forEach(b=>{ totalShares += b.amount/b.price; totalCost += b.amount; });
+  buys.forEach(b=>{ const sh=b.amount/b.price; totalShares+=sh; totalCost+=b.amount; });
   return totalShares>0 ? totalCost/totalShares : 0;
 }
 
