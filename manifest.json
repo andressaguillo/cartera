@@ -2,7 +2,7 @@
   "name": "Cartera de inversión",
   "short_name": "Cartera",
   "description": "Dashboard personal de inversión",
-  "start_url": "/cartera/",
+  "start_url": "/cartera/cartera.html",
   "scope": "/cartera/",
   "display": "standalone",
   "background_color": "#ffffff",
