@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cartera">
+<link rel="apple-touch-icon" href="icono-192.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -35,7 +36,7 @@
 }
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:calc(80px + env(safe-area-inset-bottom));transition:background .25s,color .25s;}
 
-.header{background:var(--header-grad);border-bottom:1px solid var(--header-border);padding:16px 16px 14px;position:sticky;top:0;z-index:101;transition:background .25s,border-color .25s;box-shadow:0 2px 12px rgba(0,0,0,.18);}
+.header{background:var(--header-grad);border-bottom:1px solid var(--header-border);padding:calc(16px + env(safe-area-inset-top)) 16px 14px;position:sticky;top:0;z-index:101;transition:background .25s,border-color .25s;box-shadow:0 2px 12px rgba(0,0,0,.18);}
 .header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
 .header-titles{flex:1;min-width:0;}
 .header-eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--header-text2);margin-bottom:5px;opacity:.85;}
@@ -628,10 +629,384 @@ const DEFAULT_ETFS = [
 
 const DEFAULT_PRICES = {msci:123.93,sp500:693.74,gold:69.32,silver:51.87,nasdaq:1473.40,defense:48.90,platinum:20.41,asia:266.15};
 
-const DEFAULT_APORTACIONES = [{"etf":"msci","date":"2026-01-02","amount":83.0,"price":111.41},{"etf":"msci","date":"2026-01-09","amount":83.0,"price":114.05},{"etf":"msci","date":"2026-01-16","amount":75.0,"price":114.55},{"etf":"msci","date":"2026-02-16","amount":25.0,"price":112.08},{"etf":"msci","date":"2026-02-23","amount":25.0,"price":113.64},{"etf":"msci","date":"2026-03-02","amount":60.0,"price":113.82},{"etf":"msci","date":"2026-03-09","amount":60.0,"price":111.15},{"etf":"msci","date":"2026-03-16","amount":70.0,"price":112.3},{"etf":"msci","date":"2026-03-23","amount":70.0,"price":109.935},{"etf":"msci","date":"2026-04-02","amount":94.0,"price":109.674},{"etf":"msci","date":"2026-04-02","amount":2.49,"price":109.61},{"etf":"msci","date":"2026-04-09","amount":94.0,"price":112.43},{"etf":"msci","date":"2026-04-16","amount":46.0,"price":115.115},{"etf":"msci","date":"2026-04-23","amount":46.0,"price":116.905},{"etf":"msci","date":"2026-05-04","amount":62.0,"price":117.859},{"etf":"msci","date":"2026-05-04","amount":3.65,"price":117.81},{"etf":"msci","date":"2026-05-11","amount":62.0,"price":119.68},{"etf":"msci","date":"2026-05-18","amount":69.0,"price":120.943},{"etf":"msci","date":"2026-05-25","amount":69.0,"price":123.635},{"etf":"msci","date":"2026-06-02","amount":83.75,"price":123.97},{"etf":"msci","date":"2026-06-09","amount":77.0,"price":122.77},{"etf":"msci","date":"2026-06-16","amount":81.0,"price":124.252},{"etf":"msci","date":"2026-06-23","amount":81.0,"price":124.345},{"etf":"msci","date":"2025-01-02","amount":65.0,"price":105.093},{"etf":"msci","date":"2025-01-09","amount":65.0,"price":105.125},{"etf":"msci","date":"2025-01-16","amount":65.0,"price":105.693},{"etf":"msci","date":"2025-01-23","amount":65.0,"price":107.13},{"etf":"msci","date":"2025-02-03","amount":65.0,"price":107.01},{"etf":"msci","date":"2025-02-10","amount":65.0,"price":108.46},{"etf":"msci","date":"2025-02-17","amount":65.0,"price":108.3},{"etf":"msci","date":"2025-02-24","amount":65.0,"price":108.3},{"etf":"msci","date":"2025-03-03","amount":65.0,"price":106.02},{"etf":"msci","date":"2025-03-10","amount":65.0,"price":98.52},{"etf":"msci","date":"2025-03-17","amount":65.0,"price":98.38},{"etf":"msci","date":"2025-03-24","amount":65.0,"price":100.73},{"etf":"msci","date":"2025-04-02","amount":65.0,"price":98.12},{"etf":"msci","date":"2025-04-09","amount":65.0,"price":86.27},{"etf":"msci","date":"2025-04-16","amount":65.0,"price":89.5},{"etf":"msci","date":"2025-04-23","amount":65.0,"price":92.03},{"etf":"msci","date":"2025-05-02","amount":70.0,"price":95.7},{"etf":"msci","date":"2025-05-09","amount":70.0,"price":96.59},{"etf":"msci","date":"2025-05-16","amount":70.0,"price":100.53},{"etf":"msci","date":"2025-05-23","amount":70.0,"price":97.93},{"etf":"msci","date":"2025-06-02","amount":70.0,"price":98.63},{"etf":"msci","date":"2025-06-09","amount":70.0,"price":100.45},{"etf":"msci","date":"2025-06-16","amount":70.0,"price":99.44},{"etf":"msci","date":"2025-06-23","amount":70.0,"price":98.98},{"etf":"msci","date":"2025-07-02","amount":70.0,"price":100.19},{"etf":"msci","date":"2025-07-09","amount":70.0,"price":101.49},{"etf":"msci","date":"2025-07-16","amount":70.0,"price":101.97},{"etf":"msci","date":"2025-07-23","amount":70.0,"price":102.35},{"etf":"msci","date":"2025-08-04","amount":70.0,"price":102.91},{"etf":"msci","date":"2025-08-18","amount":80.0,"price":104.8},{"etf":"msci","date":"2025-08-25","amount":80.0,"price":104.9},{"etf":"msci","date":"2025-09-02","amount":80.0,"price":103.89},{"etf":"msci","date":"2025-09-09","amount":80.0,"price":105.15},{"etf":"msci","date":"2025-09-16","amount":80.0,"price":105.93},{"etf":"msci","date":"2025-09-23","amount":80.0,"price":107.41},{"etf":"msci","date":"2025-10-02","amount":80.0,"price":108.47},{"etf":"msci","date":"2025-10-09","amount":80.0,"price":110.04},{"etf":"msci","date":"2025-10-16","amount":80.0,"price":108.82},{"etf":"msci","date":"2025-10-23","amount":80.0,"price":109.54},{"etf":"msci","date":"2025-11-03","amount":80.0,"price":111.87},{"etf":"msci","date":"2025-11-10","amount":80.0,"price":111.2},{"etf":"msci","date":"2025-11-17","amount":80.0,"price":109.95},{"etf":"msci","date":"2025-11-24","amount":80.0,"price":109.31},{"etf":"msci","date":"2025-12-02","amount":80.0,"price":111.21},{"etf":"msci","date":"2025-12-09","amount":80.0,"price":111.65},{"etf":"msci","date":"2025-12-16","amount":120.0,"price":109.81},{"etf":"msci","date":"2025-12-23","amount":120.0,"price":111.3},{"etf":"msci","date":"2024-01-02","amount":5.0,"price":82.164},{"etf":"msci","date":"2024-01-16","amount":5.0,"price":82.808},{"etf":"msci","date":"2024-02-02","amount":5.0,"price":85.67},{"etf":"msci","date":"2024-03-04","amount":10.0,"price":88.742},{"etf":"msci","date":"2024-03-11","amount":10.0,"price":88.296},{"etf":"msci","date":"2024-03-18","amount":10.0,"price":89.36},{"etf":"msci","date":"2024-03-25","amount":10.0,"price":90.744},{"etf":"msci","date":"2024-04-02","amount":10.0,"price":90.526},{"etf":"msci","date":"2024-04-09","amount":10.0,"price":90.162},{"etf":"msci","date":"2024-04-16","amount":10.0,"price":89.161},{"etf":"msci","date":"2024-04-23","amount":10.0,"price":89.034},{"etf":"msci","date":"2024-05-02","amount":10.0,"price":89.07},{"etf":"msci","date":"2024-05-09","amount":10.0,"price":90.978},{"etf":"msci","date":"2024-05-16","amount":10.0,"price":92.3},{"etf":"msci","date":"2024-05-23","amount":15.0,"price":92.206},{"etf":"msci","date":"2024-06-03","amount":15.0,"price":91.68},{"etf":"msci","date":"2024-06-10","amount":15.0,"price":93.258},{"etf":"msci","date":"2024-06-17","amount":15.0,"price":93.957},{"etf":"msci","date":"2024-07-16","amount":25.0,"price":96.38},{"etf":"msci","date":"2024-07-23","amount":25.0,"price":95.52},{"etf":"msci","date":"2024-08-02","amount":25.0,"price":90.69},{"etf":"msci","date":"2024-08-09","amount":25.0,"price":90.702},{"etf":"msci","date":"2024-08-16","amount":25.0,"price":94.064},{"etf":"msci","date":"2024-08-23","amount":25.0,"price":94.746},{"etf":"msci","date":"2024-09-02","amount":25.0,"price":95.56},{"etf":"msci","date":"2024-09-09","amount":25.0,"price":92.82},{"etf":"msci","date":"2024-09-16","amount":25.0,"price":94.758},{"etf":"msci","date":"2024-09-23","amount":25.0,"price":96.034},{"etf":"msci","date":"2024-10-02","amount":25.0,"price":96.784},{"etf":"msci","date":"2024-10-09","amount":25.0,"price":97.858},{"etf":"msci","date":"2024-10-16","amount":30.0,"price":99.315},{"etf":"msci","date":"2024-10-23","amount":30.0,"price":99.92},{"etf":"msci","date":"2024-11-04","amount":30.0,"price":97.59},{"etf":"msci","date":"2024-11-11","amount":30.0,"price":103.45},{"etf":"msci","date":"2024-11-18","amount":30.0,"price":101.964},{"etf":"msci","date":"2024-11-25","amount":30.0,"price":104.69},{"etf":"msci","date":"2024-12-02","amount":35.0,"price":105.66},{"etf":"msci","date":"2024-12-09","amount":35.0,"price":105.92},{"etf":"msci","date":"2024-12-16","amount":35.0,"price":105.84},{"etf":"msci","date":"2024-12-23","amount":35.0,"price":104.03},{"etf":"msci","date":"2023-09-04","amount":3.0,"price":79.032},{"etf":"msci","date":"2023-09-18","amount":5.0,"price":78.898},{"etf":"msci","date":"2023-10-02","amount":5.0,"price":77.121},{"etf":"msci","date":"2023-10-16","amount":5.0,"price":77.942},{"etf":"msci","date":"2023-11-02","amount":5.0,"price":76.726},{"etf":"msci","date":"2023-11-16","amount":5.0,"price":78.1},{"etf":"msci","date":"2023-12-04","amount":5.0,"price":79.888},{"etf":"msci","date":"2023-12-18","amount":5.0,"price":81.967},{"etf":"sp500","date":"2026-01-02","amount":7.0,"price":629.38},{"etf":"sp500","date":"2026-01-09","amount":7.0,"price":639.16},{"etf":"sp500","date":"2025-01-02","amount":35.0,"price":610.36},{"etf":"sp500","date":"2025-01-09","amount":35.0,"price":608.0},{"etf":"sp500","date":"2025-01-16","amount":35.0,"price":613.96},{"etf":"sp500","date":"2025-01-23","amount":35.0,"price":620.16},{"etf":"sp500","date":"2025-02-03","amount":35.0,"price":616.02},{"etf":"sp500","date":"2025-02-10","amount":35.0,"price":623.26},{"etf":"sp500","date":"2025-02-17","amount":35.0,"price":620.24},{"etf":"sp500","date":"2025-02-24","amount":35.0,"price":611.68},{"etf":"sp500","date":"2025-03-03","amount":35.0,"price":602.78},{"etf":"sp500","date":"2025-03-10","amount":35.0,"price":554.28},{"etf":"sp500","date":"2025-03-17","amount":35.0,"price":550.86},{"etf":"sp500","date":"2025-03-24","amount":35.0,"price":566.46},{"etf":"sp500","date":"2025-04-02","amount":35.0,"price":550.74},{"etf":"sp500","date":"2025-04-09","amount":35.0,"price":480.34},{"etf":"sp500","date":"2025-04-16","amount":35.0,"price":500.64},{"etf":"sp500","date":"2025-04-23","amount":35.0,"price":510.02},{"etf":"sp500","date":"2025-05-02","amount":35.0,"price":528.72},{"etf":"sp500","date":"2025-05-09","amount":35.0,"price":536.9},{"etf":"sp500","date":"2025-05-16","amount":35.0,"price":563.02},{"etf":"sp500","date":"2025-05-23","amount":35.0,"price":542.76},{"etf":"sp500","date":"2025-06-02","amount":35.0,"price":548.5},{"etf":"sp500","date":"2025-06-09","amount":35.0,"price":561.08},{"etf":"sp500","date":"2025-06-16","amount":35.0,"price":554.44},{"etf":"sp500","date":"2025-06-23","amount":35.0,"price":554.8},{"etf":"sp500","date":"2025-07-02","amount":35.0,"price":561.9},{"etf":"sp500","date":"2025-07-09","amount":35.0,"price":570.98},{"etf":"sp500","date":"2025-07-16","amount":35.0,"price":576.06},{"etf":"sp500","date":"2025-07-23","amount":35.0,"price":575.9},{"etf":"sp500","date":"2025-08-04","amount":35.0,"price":580.72},{"etf":"sp500","date":"2025-08-11","amount":35.0,"price":586.98},{"etf":"sp500","date":"2025-08-18","amount":35.0,"price":589.38},{"etf":"sp500","date":"2025-08-25","amount":35.0,"price":588.6},{"etf":"sp500","date":"2025-09-02","amount":30.0,"price":586.9},{"etf":"sp500","date":"2025-09-09","amount":30.0,"price":591.2},{"etf":"sp500","date":"2025-09-16","amount":30.0,"price":597.94},{"etf":"sp500","date":"2025-09-23","amount":30.0,"price":607.12},{"etf":"sp500","date":"2025-10-02","amount":30.0,"price":613.22},{"etf":"sp500","date":"2025-10-09","amount":30.0,"price":621.82},{"etf":"sp500","date":"2025-10-16","amount":10.0,"price":613.76},{"etf":"sp500","date":"2025-10-23","amount":10.0,"price":619.92},{"etf":"sp500","date":"2025-11-03","amount":10.0,"price":635.4},{"etf":"sp500","date":"2025-11-10","amount":10.0,"price":629.54},{"etf":"sp500","date":"2025-11-17","amount":10.0,"price":623.56},{"etf":"sp500","date":"2025-11-24","amount":10.0,"price":616.28},{"etf":"sp500","date":"2025-12-02","amount":10.0,"price":630.76},{"etf":"sp500","date":"2025-12-09","amount":10.0,"price":630.9},{"etf":"sp500","date":"2025-12-16","amount":10.0,"price":618.38},{"etf":"sp500","date":"2024-07-16","amount":5.0,"price":548.42},{"etf":"sp500","date":"2024-07-23","amount":5.0,"price":542.12},{"etf":"sp500","date":"2024-08-02","amount":5.0,"price":521.04},{"etf":"sp500","date":"2024-08-09","amount":5.0,"price":513.04},{"etf":"sp500","date":"2024-08-16","amount":5.0,"price":531.22},{"etf":"sp500","date":"2024-08-23","amount":5.0,"price":532.96},{"etf":"sp500","date":"2024-09-02","amount":5.0,"price":539.06},{"etf":"sp500","date":"2024-09-09","amount":5.0,"price":521.82},{"etf":"sp500","date":"2024-09-16","amount":5.0,"price":534.04},{"etf":"sp500","date":"2024-09-23","amount":5.0,"price":542.84},{"etf":"sp500","date":"2024-10-02","amount":5.0,"price":544.7},{"etf":"sp500","date":"2024-10-09","amount":5.0,"price":555.6},{"etf":"sp500","date":"2024-10-16","amount":10.0,"price":564.94},{"etf":"sp500","date":"2024-10-23","amount":10.0,"price":572.42},{"etf":"sp500","date":"2024-11-04","amount":10.0,"price":556.48},{"etf":"sp500","date":"2024-11-11","amount":10.0,"price":597.92},{"etf":"sp500","date":"2024-11-18","amount":10.0,"price":588.3},{"etf":"sp500","date":"2024-11-25","amount":10.0,"price":606.8},{"etf":"sp500","date":"2024-12-02","amount":10.0,"price":610.82},{"etf":"sp500","date":"2024-12-09","amount":10.0,"price":609.92},{"etf":"sp500","date":"2024-12-16","amount":10.0,"price":613.76},{"etf":"sp500","date":"2024-12-23","amount":10.0,"price":605.06},{"etf":"gold","date":"2026-01-02","amount":17.0,"price":72.69},{"etf":"gold","date":"2026-01-09","amount":17.0,"price":74.56},{"etf":"gold","date":"2026-01-16","amount":17.0,"price":76.91},{"etf":"gold","date":"2026-01-23","amount":17.0,"price":81.15},{"etf":"gold","date":"2026-02-02","amount":28.0,"price":76.98},{"etf":"gold","date":"2026-02-09","amount":28.0,"price":82.1},{"etf":"gold","date":"2026-02-16","amount":19.0,"price":81.99},{"etf":"gold","date":"2026-02-23","amount":19.0,"price":84.62},{"etf":"gold","date":"2026-03-02","amount":16.0,"price":89.27},{"etf":"gold","date":"2026-03-09","amount":16.0,"price":86.03},{"etf":"gold","date":"2026-03-16","amount":20.0,"price":84.71},{"etf":"gold","date":"2026-03-23","amount":20.0,"price":71.975},{"etf":"gold","date":"2026-04-02","amount":28.0,"price":77.98},{"etf":"gold","date":"2026-04-09","amount":28.0,"price":78.645},{"etf":"gold","date":"2026-04-16","amount":72.0,"price":79.26},{"etf":"gold","date":"2026-04-23","amount":72.0,"price":78.1},{"etf":"gold","date":"2026-05-04","amount":60.0,"price":75.81},{"etf":"gold","date":"2026-05-11","amount":60.0,"price":76.975},{"etf":"gold","date":"2026-05-18","amount":51.0,"price":75.84},{"etf":"gold","date":"2026-05-25","amount":51.0,"price":75.93},{"etf":"gold","date":"2026-06-02","amount":43.0,"price":75.44},{"etf":"gold","date":"2026-06-09","amount":43.0,"price":72.835},{"etf":"gold","date":"2026-06-16","amount":30.0,"price":72.64},{"etf":"gold","date":"2026-06-23","amount":30.0,"price":69.815},{"etf":"gold","date":"2025-04-16","amount":15.0,"price":56.32},{"etf":"gold","date":"2025-04-23","amount":15.0,"price":56.52},{"etf":"gold","date":"2025-05-02","amount":15.0,"price":55.9},{"etf":"gold","date":"2025-05-09","amount":15.0,"price":57.38},{"etf":"gold","date":"2025-05-16","amount":15.0,"price":55.6},{"etf":"gold","date":"2025-05-23","amount":15.0,"price":56.99},{"etf":"gold","date":"2025-06-02","amount":15.0,"price":57.08},{"etf":"gold","date":"2025-06-09","amount":15.0,"price":56.51},{"etf":"gold","date":"2025-06-16","amount":15.0,"price":57.28},{"etf":"gold","date":"2025-06-23","amount":15.0,"price":56.79},{"etf":"gold","date":"2025-07-02","amount":15.98,"price":55.05},{"etf":"gold","date":"2025-07-09","amount":15.0,"price":54.48},{"etf":"gold","date":"2025-07-16","amount":15.0,"price":55.83},{"etf":"gold","date":"2025-07-23","amount":15.0,"price":56.7},{"etf":"gold","date":"2025-08-04","amount":18.09,"price":56.48},{"etf":"gold","date":"2025-08-11","amount":15.0,"price":56.07},{"etf":"gold","date":"2025-08-18","amount":10.0,"price":55.65},{"etf":"gold","date":"2025-08-25","amount":10.0,"price":55.82},{"etf":"gold","date":"2025-09-02","amount":10.0,"price":58.03},{"etf":"gold","date":"2025-09-09","amount":10.0,"price":60.3},{"etf":"gold","date":"2025-09-16","amount":10.0,"price":60.83},{"etf":"gold","date":"2025-09-23","amount":10.0,"price":61.99},{"etf":"gold","date":"2025-10-02","amount":10.0,"price":64.01},{"etf":"gold","date":"2025-10-09","amount":10.0,"price":67.57},{"etf":"gold","date":"2025-10-16","amount":20.0,"price":70.46},{"etf":"gold","date":"2025-10-23","amount":20.0,"price":68.81},{"etf":"gold","date":"2025-11-03","amount":20.0,"price":67.5},{"etf":"gold","date":"2025-11-10","amount":20.0,"price":68.59},{"etf":"gold","date":"2025-11-17","amount":20.0,"price":68.16},{"etf":"gold","date":"2025-11-24","amount":20.0,"price":68.54},{"etf":"gold","date":"2025-12-02","amount":20.0,"price":70.12},{"etf":"gold","date":"2025-12-09","amount":20.0,"price":70.07},{"etf":"gold","date":"2025-12-16","amount":20.0,"price":70.7},{"etf":"gold","date":"2025-12-23","amount":20.0,"price":73.82},{"etf":"silver","date":"2026-01-02","amount":13.99,"price":59.508},{"etf":"silver","date":"2026-01-09","amount":10.0,"price":65.047},{"etf":"silver","date":"2026-01-16","amount":10.0,"price":73.42},{"etf":"silver","date":"2026-01-23","amount":10.0,"price":81.051},{"etf":"silver","date":"2026-02-02","amount":49.0,"price":64.282},{"etf":"silver","date":"2026-02-02","amount":7.18,"price":64.04},{"etf":"silver","date":"2026-02-09","amount":49.0,"price":65.18},{"etf":"silver","date":"2026-02-16","amount":25.0,"price":61.36},{"etf":"silver","date":"2026-02-23","amount":25.0,"price":70.59},{"etf":"silver","date":"2026-03-02","amount":25.61,"price":73.63},{"etf":"silver","date":"2026-03-09","amount":20.0,"price":69.47},{"etf":"silver","date":"2026-03-16","amount":20.0,"price":66.996},{"etf":"silver","date":"2026-03-23","amount":20.0,"price":57.645},{"etf":"silver","date":"2026-04-02","amount":5.0,"price":59.206},{"etf":"silver","date":"2026-04-09","amount":5.0,"price":60.966},{"etf":"silver","date":"2026-04-16","amount":2.0,"price":63.731},{"etf":"silver","date":"2026-04-23","amount":2.0,"price":61.814},{"etf":"silver","date":"2025-10-16","amount":10.0,"price":43.68},{"etf":"silver","date":"2025-10-23","amount":10.0,"price":40.5},{"etf":"silver","date":"2025-11-03","amount":13.62,"price":40.33},{"etf":"silver","date":"2025-11-10","amount":10.0,"price":41.23},{"etf":"silver","date":"2025-11-17","amount":10.0,"price":41.74},{"etf":"silver","date":"2025-11-24","amount":10.0,"price":41.74},{"etf":"silver","date":"2025-12-02","amount":12.7,"price":47.07},{"etf":"silver","date":"2025-12-09","amount":10.0,"price":48.47},{"etf":"silver","date":"2025-12-16","amount":30.0,"price":51.38},{"etf":"silver","date":"2025-12-23","amount":30.0,"price":56.26},{"etf":"nasdaq","date":"2026-01-16","amount":6.0,"price":1261.6},{"etf":"nasdaq","date":"2026-01-23","amount":6.0,"price":1247.4},{"etf":"nasdaq","date":"2026-02-02","amount":25.0,"price":1253.0},{"etf":"nasdaq","date":"2026-02-09","amount":25.0,"price":1211.6},{"etf":"nasdaq","date":"2026-02-16","amount":15.0,"price":1194.4},{"etf":"nasdaq","date":"2026-02-23","amount":15.0,"price":1207.0},{"etf":"nasdaq","date":"2026-03-02","amount":3.0,"price":1219.0},{"etf":"nasdaq","date":"2026-03-16","amount":10.0,"price":1232.8},{"etf":"nasdaq","date":"2026-04-02","amount":9.0,"price":1184.8},{"etf":"nasdaq","date":"2026-04-09","amount":9.0,"price":1219.8},{"etf":"nasdaq","date":"2026-06-16","amount":25.0,"price":1505.2},{"etf":"nasdaq","date":"2026-06-23","amount":25.0,"price":1498.4},{"etf":"nasdaq","date":"2025-01-02","amount":10.0,"price":1171.2},{"etf":"nasdaq","date":"2025-01-09","amount":10.0,"price":1173.4},{"etf":"nasdaq","date":"2025-01-16","amount":10.0,"price":1180.6},{"etf":"nasdaq","date":"2025-01-23","amount":10.0,"price":1196.2},{"etf":"nasdaq","date":"2025-02-03","amount":10.0,"price":1182.4},{"etf":"nasdaq","date":"2025-02-10","amount":10.0,"price":1206.2},{"etf":"nasdaq","date":"2025-02-17","amount":10.0,"price":1209.0},{"etf":"nasdaq","date":"2025-02-24","amount":10.0,"price":1209.0},{"etf":"nasdaq","date":"2025-03-03","amount":10.0,"price":1138.2},{"etf":"nasdaq","date":"2025-03-10","amount":10.0,"price":1033.0},{"etf":"nasdaq","date":"2025-03-17","amount":10.0,"price":1031.4},{"etf":"nasdaq","date":"2025-03-24","amount":10.0,"price":1068.0},{"etf":"nasdaq","date":"2025-04-02","amount":10.0,"price":1025.0},{"etf":"nasdaq","date":"2025-12-16","amount":50.0,"price":1218.6},{"etf":"nasdaq","date":"2025-12-23","amount":50.0,"price":1240.0},{"etf":"defense","date":"2026-03-02","amount":7.0,"price":62.27},{"etf":"defense","date":"2026-03-09","amount":7.0,"price":62.85},{"etf":"defense","date":"2026-03-16","amount":13.0,"price":62.63},{"etf":"defense","date":"2026-03-23","amount":13.0,"price":60.39},{"etf":"defense","date":"2026-04-02","amount":2.0,"price":60.33},{"etf":"defense","date":"2026-04-09","amount":3.0,"price":59.89},{"etf":"defense","date":"2026-04-16","amount":4.0,"price":59.63},{"etf":"defense","date":"2026-04-23","amount":4.0,"price":57.84},{"etf":"defense","date":"2026-05-04","amount":4.0,"price":57.14},{"etf":"defense","date":"2026-05-11","amount":4.0,"price":53.28},{"etf":"defense","date":"2026-05-18","amount":4.0,"price":52.2},{"etf":"defense","date":"2026-05-25","amount":4.0,"price":54.83},{"etf":"defense","date":"2026-06-02","amount":5.0,"price":55.22},{"etf":"defense","date":"2026-06-09","amount":5.0,"price":52.28},{"etf":"defense","date":"2025-08-18","amount":10.0,"price":50.36},{"etf":"defense","date":"2025-08-25","amount":10.0,"price":49.5},{"etf":"defense","date":"2025-09-02","amount":13.24,"price":49.72},{"etf":"defense","date":"2025-09-09","amount":10.0,"price":49.22},{"etf":"defense","date":"2025-09-16","amount":10.0,"price":51.83},{"etf":"defense","date":"2025-09-23","amount":10.0,"price":53.22},{"etf":"defense","date":"2025-10-02","amount":10.0,"price":56.34},{"etf":"defense","date":"2025-10-02","amount":3.08,"price":56.29},{"etf":"defense","date":"2025-10-09","amount":10.0,"price":56.94},{"etf":"defense","date":"2025-10-16","amount":10.0,"price":53.13},{"etf":"defense","date":"2025-10-23","amount":10.0,"price":55.12},{"etf":"defense","date":"2025-11-03","amount":10.0,"price":55.8},{"etf":"defense","date":"2025-11-10","amount":10.0,"price":53.8},{"etf":"defense","date":"2025-11-17","amount":10.0,"price":52.38},{"etf":"defense","date":"2025-11-24","amount":10.0,"price":49.41},{"etf":"defense","date":"2025-12-02","amount":10.0,"price":49.56},{"etf":"defense","date":"2025-12-09","amount":10.0,"price":51.95},{"etf":"defense","date":"2025-12-16","amount":20.0,"price":50.16},{"etf":"platinum","date":"2026-01-02","amount":7.0,"price":25.95},{"etf":"platinum","date":"2026-01-09","amount":7.0,"price":28.4},{"etf":"platinum","date":"2026-01-16","amount":15.0,"price":28.94},{"etf":"platinum","date":"2026-01-23","amount":15.0,"price":32.48},{"etf":"platinum","date":"2026-02-02","amount":49.0,"price":24.5},{"etf":"platinum","date":"2026-02-09","amount":49.0,"price":25.39},{"etf":"platinum","date":"2026-02-16","amount":36.0,"price":24.73},{"etf":"platinum","date":"2026-02-23","amount":36.0,"price":26.52},{"etf":"platinum","date":"2026-03-02","amount":16.0,"price":28.919},{"etf":"platinum","date":"2026-03-09","amount":16.0,"price":26.261},{"etf":"platinum","date":"2026-03-16","amount":5.0,"price":25.79},{"etf":"platinum","date":"2026-03-23","amount":5.0,"price":22.435},{"etf":"asia","date":"2026-01-02","amount":10.0,"price":208.1},{"etf":"asia","date":"2026-01-09","amount":10.0,"price":212.95},{"etf":"asia","date":"2026-01-16","amount":15.0,"price":216.35},{"etf":"asia","date":"2026-01-23","amount":15.0,"price":215.4},{"etf":"asia","date":"2026-02-02","amount":62.0,"price":215.8},{"etf":"asia","date":"2026-02-09","amount":62.0,"price":219.75},{"etf":"asia","date":"2026-02-16","amount":20.0,"price":223.95},{"etf":"asia","date":"2026-02-23","amount":20.0,"price":228.1},{"etf":"asia","date":"2026-03-02","amount":16.0,"price":227.65},{"etf":"asia","date":"2026-03-09","amount":16.0,"price":214.8},{"etf":"asia","date":"2026-03-16","amount":10.0,"price":222.0},{"etf":"asia","date":"2026-03-23","amount":10.0,"price":216.85},{"etf":"asia","date":"2026-04-02","amount":11.0,"price":209.45},{"etf":"asia","date":"2026-04-09","amount":11.0,"price":221.15},{"etf":"asia","date":"2026-04-16","amount":21.0,"price":230.45},{"etf":"asia","date":"2026-04-23","amount":21.0,"price":234.9},{"etf":"asia","date":"2026-05-04","amount":19.0,"price":244.95},{"etf":"asia","date":"2026-05-11","amount":19.0,"price":256.6},{"etf":"asia","date":"2026-05-18","amount":16.0,"price":249.75},{"etf":"asia","date":"2026-05-25","amount":16.0,"price":259.75},{"etf":"asia","date":"2026-06-02","amount":14.0,"price":274.3},{"etf":"asia","date":"2026-06-09","amount":14.0,"price":258.0},{"etf":"asia","date":"2026-06-16","amount":14.0,"price":269.85},{"etf":"asia","date":"2026-06-23","amount":14.0,"price":271.25},{"etf":"asia","date":"2025-08-18","amount":10.0,"price":229.7}]
-;
-
-const SWATCH_COLORS = ['#3b82f6','#22c55e','#f59e0b','#94a3b8','#a855f7','#ef4444','#e2e8f0','#f97316','#14b8a6','#ec4899','#84cc16','#6366f1'];
+const DEFAULT_APORTACIONES = [
+  {"etf":"msci","date":"2023-09-04","amount":3.0,"price":79.032},
+  {"etf":"msci","date":"2023-09-18","amount":5.0,"price":78.898},
+  {"etf":"msci","date":"2023-10-02","amount":5.0,"price":77.121},
+  {"etf":"msci","date":"2023-10-16","amount":5.0,"price":77.942},
+  {"etf":"msci","date":"2023-11-02","amount":5.0,"price":76.726},
+  {"etf":"msci","date":"2023-11-16","amount":5.0,"price":78.1},
+  {"etf":"msci","date":"2023-12-04","amount":5.0,"price":79.888},
+  {"etf":"msci","date":"2023-12-18","amount":5.0,"price":81.967},
+  {"etf":"msci","date":"2024-01-02","amount":5.0,"price":82.164},
+  {"etf":"msci","date":"2024-01-16","amount":5.0,"price":82.808},
+  {"etf":"msci","date":"2024-02-02","amount":5.0,"price":85.67},
+  {"etf":"msci","date":"2024-03-04","amount":10.0,"price":88.742},
+  {"etf":"msci","date":"2024-03-11","amount":10.0,"price":88.296},
+  {"etf":"msci","date":"2024-03-18","amount":10.0,"price":89.36},
+  {"etf":"msci","date":"2024-03-25","amount":10.0,"price":90.744},
+  {"etf":"msci","date":"2024-04-02","amount":10.0,"price":90.526},
+  {"etf":"msci","date":"2024-04-09","amount":10.0,"price":90.162},
+  {"etf":"msci","date":"2024-04-16","amount":10.0,"price":89.161},
+  {"etf":"msci","date":"2024-04-23","amount":10.0,"price":89.034},
+  {"etf":"msci","date":"2024-05-02","amount":10.0,"price":89.07},
+  {"etf":"msci","date":"2024-05-09","amount":10.0,"price":90.978},
+  {"etf":"msci","date":"2024-05-16","amount":10.0,"price":92.3},
+  {"etf":"msci","date":"2024-05-23","amount":15.0,"price":92.206},
+  {"etf":"msci","date":"2024-06-03","amount":15.0,"price":91.68},
+  {"etf":"msci","date":"2024-06-10","amount":15.0,"price":93.258},
+  {"etf":"msci","date":"2024-06-17","amount":15.0,"price":93.957},
+  {"etf":"msci","date":"2024-07-16","amount":25.0,"price":96.38},
+  {"etf":"msci","date":"2024-07-23","amount":25.0,"price":95.52},
+  {"etf":"msci","date":"2024-08-02","amount":25.0,"price":90.69},
+  {"etf":"msci","date":"2024-08-09","amount":25.0,"price":90.702},
+  {"etf":"msci","date":"2024-08-16","amount":25.0,"price":94.064},
+  {"etf":"msci","date":"2024-08-23","amount":25.0,"price":94.746},
+  {"etf":"msci","date":"2024-09-02","amount":25.0,"price":95.56},
+  {"etf":"msci","date":"2024-09-09","amount":25.0,"price":92.82},
+  {"etf":"msci","date":"2024-09-16","amount":25.0,"price":94.758},
+  {"etf":"msci","date":"2024-09-23","amount":25.0,"price":96.034},
+  {"etf":"msci","date":"2024-10-02","amount":25.0,"price":96.784},
+  {"etf":"msci","date":"2024-10-09","amount":25.0,"price":97.858},
+  {"etf":"msci","date":"2024-10-16","amount":30.0,"price":99.315},
+  {"etf":"msci","date":"2024-10-23","amount":30.0,"price":99.92},
+  {"etf":"msci","date":"2024-11-04","amount":30.0,"price":97.59},
+  {"etf":"msci","date":"2024-11-11","amount":30.0,"price":103.45},
+  {"etf":"msci","date":"2024-11-18","amount":30.0,"price":101.964},
+  {"etf":"msci","date":"2024-11-25","amount":30.0,"price":104.69},
+  {"etf":"msci","date":"2024-12-02","amount":35.0,"price":105.66},
+  {"etf":"msci","date":"2024-12-09","amount":35.0,"price":105.92},
+  {"etf":"msci","date":"2024-12-16","amount":35.0,"price":105.84},
+  {"etf":"msci","date":"2024-12-23","amount":35.0,"price":104.03},
+  {"etf":"msci","date":"2025-01-02","amount":65.0,"price":105.093},
+  {"etf":"msci","date":"2025-01-09","amount":65.0,"price":105.125},
+  {"etf":"msci","date":"2025-01-16","amount":65.0,"price":105.693},
+  {"etf":"msci","date":"2025-01-23","amount":65.0,"price":107.13},
+  {"etf":"msci","date":"2025-02-03","amount":65.0,"price":107.01},
+  {"etf":"msci","date":"2025-02-10","amount":65.0,"price":108.46},
+  {"etf":"msci","date":"2025-02-17","amount":65.0,"price":108.3},
+  {"etf":"msci","date":"2025-02-24","amount":65.0,"price":108.3},
+  {"etf":"msci","date":"2025-03-03","amount":65.0,"price":106.02},
+  {"etf":"msci","date":"2025-03-10","amount":65.0,"price":98.52},
+  {"etf":"msci","date":"2025-03-17","amount":65.0,"price":98.38},
+  {"etf":"msci","date":"2025-03-24","amount":65.0,"price":100.73},
+  {"etf":"msci","date":"2025-04-02","amount":65.0,"price":98.12},
+  {"etf":"msci","date":"2025-04-09","amount":65.0,"price":86.27},
+  {"etf":"msci","date":"2025-04-16","amount":65.0,"price":89.5},
+  {"etf":"msci","date":"2025-04-23","amount":65.0,"price":92.03},
+  {"etf":"msci","date":"2025-05-02","amount":70.0,"price":95.7},
+  {"etf":"msci","date":"2025-05-09","amount":70.0,"price":96.59},
+  {"etf":"msci","date":"2025-05-16","amount":70.0,"price":100.53},
+  {"etf":"msci","date":"2025-05-23","amount":70.0,"price":97.93},
+  {"etf":"msci","date":"2025-06-02","amount":70.0,"price":98.63},
+  {"etf":"msci","date":"2025-06-09","amount":70.0,"price":100.45},
+  {"etf":"msci","date":"2025-06-16","amount":70.0,"price":99.44},
+  {"etf":"msci","date":"2025-06-23","amount":70.0,"price":98.98},
+  {"etf":"msci","date":"2025-07-02","amount":70.0,"price":100.19},
+  {"etf":"msci","date":"2025-07-09","amount":70.0,"price":101.49},
+  {"etf":"msci","date":"2025-07-16","amount":70.0,"price":101.97},
+  {"etf":"msci","date":"2025-07-23","amount":70.0,"price":102.35},
+  {"etf":"msci","date":"2025-08-04","amount":70.0,"price":102.91},
+  {"etf":"msci","date":"2025-08-18","amount":80.0,"price":104.8},
+  {"etf":"msci","date":"2025-08-25","amount":80.0,"price":104.9},
+  {"etf":"msci","date":"2025-09-02","amount":80.0,"price":103.89},
+  {"etf":"msci","date":"2025-09-09","amount":80.0,"price":105.15},
+  {"etf":"msci","date":"2025-09-16","amount":80.0,"price":105.93},
+  {"etf":"msci","date":"2025-09-23","amount":80.0,"price":107.41},
+  {"etf":"msci","date":"2025-10-02","amount":80.0,"price":108.47},
+  {"etf":"msci","date":"2025-10-09","amount":80.0,"price":110.04},
+  {"etf":"msci","date":"2025-10-16","amount":80.0,"price":108.82},
+  {"etf":"msci","date":"2025-10-23","amount":80.0,"price":109.54},
+  {"etf":"msci","date":"2025-11-03","amount":80.0,"price":111.87},
+  {"etf":"msci","date":"2025-11-10","amount":80.0,"price":111.2},
+  {"etf":"msci","date":"2025-11-17","amount":80.0,"price":109.95},
+  {"etf":"msci","date":"2025-11-24","amount":80.0,"price":109.31},
+  {"etf":"msci","date":"2025-12-02","amount":80.0,"price":111.21},
+  {"etf":"msci","date":"2025-12-09","amount":80.0,"price":111.65},
+  {"etf":"msci","date":"2025-12-16","amount":120.0,"price":109.81},
+  {"etf":"msci","date":"2025-12-23","amount":120.0,"price":111.3},
+  {"etf":"msci","date":"2026-01-02","amount":83.0,"price":111.41},
+  {"etf":"msci","date":"2026-01-09","amount":83.0,"price":114.05},
+  {"etf":"msci","date":"2026-01-16","amount":75.0,"price":114.55},
+  {"etf":"msci","date":"2026-02-16","amount":25.0,"price":112.08},
+  {"etf":"msci","date":"2026-02-23","amount":25.0,"price":113.64},
+  {"etf":"msci","date":"2026-03-02","amount":60.0,"price":113.82},
+  {"etf":"msci","date":"2026-03-09","amount":60.0,"price":111.15},
+  {"etf":"msci","date":"2026-03-16","amount":70.0,"price":112.3},
+  {"etf":"msci","date":"2026-03-23","amount":70.0,"price":109.935},
+  {"etf":"msci","date":"2026-04-02","amount":94.0,"price":109.674},
+  {"etf":"msci","date":"2026-04-02","amount":2.49,"price":109.61},
+  {"etf":"msci","date":"2026-04-09","amount":94.0,"price":112.43},
+  {"etf":"msci","date":"2026-04-16","amount":46.0,"price":115.115},
+  {"etf":"msci","date":"2026-04-23","amount":46.0,"price":116.905},
+  {"etf":"msci","date":"2026-05-04","amount":62.0,"price":117.859},
+  {"etf":"msci","date":"2026-05-04","amount":3.65,"price":117.81},
+  {"etf":"msci","date":"2026-05-11","amount":62.0,"price":119.68},
+  {"etf":"msci","date":"2026-05-18","amount":69.0,"price":120.943},
+  {"etf":"msci","date":"2026-05-25","amount":69.0,"price":123.635},
+  {"etf":"msci","date":"2026-06-02","amount":83.75,"price":123.97},
+  {"etf":"msci","date":"2026-06-09","amount":77.0,"price":122.77},
+  {"etf":"msci","date":"2026-06-16","amount":81.0,"price":124.252},
+  {"etf":"msci","date":"2026-06-23","amount":81.0,"price":124.345},
+  {"etf":"sp500","date":"2024-07-16","amount":5.0,"price":548.42},
+  {"etf":"sp500","date":"2024-07-23","amount":5.0,"price":542.12},
+  {"etf":"sp500","date":"2024-08-02","amount":5.0,"price":521.04},
+  {"etf":"sp500","date":"2024-08-09","amount":5.0,"price":513.04},
+  {"etf":"sp500","date":"2024-08-16","amount":5.0,"price":531.22},
+  {"etf":"sp500","date":"2024-08-23","amount":5.0,"price":532.96},
+  {"etf":"sp500","date":"2024-09-02","amount":5.0,"price":539.06},
+  {"etf":"sp500","date":"2024-09-09","amount":5.0,"price":521.82},
+  {"etf":"sp500","date":"2024-09-16","amount":5.0,"price":534.04},
+  {"etf":"sp500","date":"2024-09-23","amount":5.0,"price":542.84},
+  {"etf":"sp500","date":"2024-10-02","amount":5.0,"price":544.7},
+  {"etf":"sp500","date":"2024-10-09","amount":5.0,"price":555.6},
+  {"etf":"sp500","date":"2024-10-16","amount":10.0,"price":564.94},
+  {"etf":"sp500","date":"2024-10-23","amount":10.0,"price":572.42},
+  {"etf":"sp500","date":"2024-11-04","amount":10.0,"price":556.48},
+  {"etf":"sp500","date":"2024-11-11","amount":10.0,"price":597.92},
+  {"etf":"sp500","date":"2024-11-18","amount":10.0,"price":588.3},
+  {"etf":"sp500","date":"2024-11-25","amount":10.0,"price":606.8},
+  {"etf":"sp500","date":"2024-12-02","amount":10.0,"price":610.82},
+  {"etf":"sp500","date":"2024-12-09","amount":10.0,"price":609.92},
+  {"etf":"sp500","date":"2024-12-16","amount":10.0,"price":613.76},
+  {"etf":"sp500","date":"2024-12-23","amount":10.0,"price":605.06},
+  {"etf":"sp500","date":"2025-01-02","amount":35.0,"price":610.36},
+  {"etf":"sp500","date":"2025-01-09","amount":35.0,"price":608.0},
+  {"etf":"sp500","date":"2025-01-16","amount":35.0,"price":613.96},
+  {"etf":"sp500","date":"2025-01-23","amount":35.0,"price":620.16},
+  {"etf":"sp500","date":"2025-02-03","amount":35.0,"price":616.02},
+  {"etf":"sp500","date":"2025-02-10","amount":35.0,"price":623.26},
+  {"etf":"sp500","date":"2025-02-17","amount":35.0,"price":620.24},
+  {"etf":"sp500","date":"2025-02-24","amount":35.0,"price":611.68},
+  {"etf":"sp500","date":"2025-03-03","amount":35.0,"price":602.78},
+  {"etf":"sp500","date":"2025-03-10","amount":35.0,"price":554.28},
+  {"etf":"sp500","date":"2025-03-17","amount":35.0,"price":550.86},
+  {"etf":"sp500","date":"2025-03-24","amount":35.0,"price":566.46},
+  {"etf":"sp500","date":"2025-04-02","amount":35.0,"price":550.74},
+  {"etf":"sp500","date":"2025-04-09","amount":35.0,"price":480.34},
+  {"etf":"sp500","date":"2025-04-16","amount":35.0,"price":500.64},
+  {"etf":"sp500","date":"2025-04-23","amount":35.0,"price":510.02},
+  {"etf":"sp500","date":"2025-05-02","amount":35.0,"price":528.72},
+  {"etf":"sp500","date":"2025-05-09","amount":35.0,"price":536.9},
+  {"etf":"sp500","date":"2025-05-16","amount":35.0,"price":563.02},
+  {"etf":"sp500","date":"2025-05-23","amount":35.0,"price":542.76},
+  {"etf":"sp500","date":"2025-06-02","amount":35.0,"price":548.5},
+  {"etf":"sp500","date":"2025-06-09","amount":35.0,"price":561.08},
+  {"etf":"sp500","date":"2025-06-16","amount":35.0,"price":554.44},
+  {"etf":"sp500","date":"2025-06-23","amount":35.0,"price":554.8},
+  {"etf":"sp500","date":"2025-07-02","amount":35.0,"price":561.9},
+  {"etf":"sp500","date":"2025-07-09","amount":35.0,"price":570.98},
+  {"etf":"sp500","date":"2025-07-16","amount":35.0,"price":576.06},
+  {"etf":"sp500","date":"2025-07-23","amount":35.0,"price":575.9},
+  {"etf":"sp500","date":"2025-08-04","amount":35.0,"price":580.72},
+  {"etf":"sp500","date":"2025-08-11","amount":35.0,"price":586.98},
+  {"etf":"sp500","date":"2025-08-18","amount":35.0,"price":589.38},
+  {"etf":"sp500","date":"2025-08-25","amount":35.0,"price":588.6},
+  {"etf":"sp500","date":"2025-09-02","amount":30.0,"price":586.9},
+  {"etf":"sp500","date":"2025-09-09","amount":30.0,"price":591.2},
+  {"etf":"sp500","date":"2025-09-16","amount":30.0,"price":597.94},
+  {"etf":"sp500","date":"2025-09-23","amount":30.0,"price":607.12},
+  {"etf":"sp500","date":"2025-10-02","amount":30.0,"price":613.22},
+  {"etf":"sp500","date":"2025-10-09","amount":30.0,"price":621.82},
+  {"etf":"sp500","date":"2025-10-16","amount":10.0,"price":613.76},
+  {"etf":"sp500","date":"2025-10-23","amount":10.0,"price":619.92},
+  {"etf":"sp500","date":"2025-11-03","amount":10.0,"price":635.4},
+  {"etf":"sp500","date":"2025-11-10","amount":10.0,"price":629.54},
+  {"etf":"sp500","date":"2025-11-17","amount":10.0,"price":623.56},
+  {"etf":"sp500","date":"2025-11-24","amount":10.0,"price":616.28},
+  {"etf":"sp500","date":"2025-12-02","amount":10.0,"price":630.76},
+  {"etf":"sp500","date":"2025-12-09","amount":10.0,"price":630.9},
+  {"etf":"sp500","date":"2025-12-16","amount":10.0,"price":618.38},
+  {"etf":"sp500","date":"2026-01-02","amount":7.0,"price":629.38},
+  {"etf":"sp500","date":"2026-01-09","amount":7.0,"price":639.16},
+  {"etf":"gold","date":"2025-04-16","amount":15.0,"price":56.32},
+  {"etf":"gold","date":"2025-04-23","amount":15.0,"price":56.52},
+  {"etf":"gold","date":"2025-05-02","amount":15.0,"price":55.9},
+  {"etf":"gold","date":"2025-05-09","amount":15.0,"price":57.38},
+  {"etf":"gold","date":"2025-05-16","amount":15.0,"price":55.6},
+  {"etf":"gold","date":"2025-05-23","amount":15.0,"price":56.99},
+  {"etf":"gold","date":"2025-06-02","amount":15.0,"price":57.08},
+  {"etf":"gold","date":"2025-06-09","amount":15.0,"price":56.51},
+  {"etf":"gold","date":"2025-06-16","amount":15.0,"price":57.28},
+  {"etf":"gold","date":"2025-06-23","amount":15.0,"price":56.79},
+  {"etf":"gold","date":"2025-07-02","amount":15.98,"price":55.05},
+  {"etf":"gold","date":"2025-07-09","amount":15.0,"price":54.48},
+  {"etf":"gold","date":"2025-07-16","amount":15.0,"price":55.83},
+  {"etf":"gold","date":"2025-07-23","amount":15.0,"price":56.7},
+  {"etf":"gold","date":"2025-08-04","amount":18.09,"price":56.48},
+  {"etf":"gold","date":"2025-08-11","amount":15.0,"price":56.07},
+  {"etf":"gold","date":"2025-08-18","amount":10.0,"price":55.65},
+  {"etf":"gold","date":"2025-08-25","amount":10.0,"price":55.82},
+  {"etf":"gold","date":"2025-09-02","amount":10.0,"price":58.03},
+  {"etf":"gold","date":"2025-09-09","amount":10.0,"price":60.3},
+  {"etf":"gold","date":"2025-09-16","amount":10.0,"price":60.83},
+  {"etf":"gold","date":"2025-09-23","amount":10.0,"price":61.99},
+  {"etf":"gold","date":"2025-10-02","amount":10.0,"price":64.01},
+  {"etf":"gold","date":"2025-10-09","amount":10.0,"price":67.57},
+  {"etf":"gold","date":"2025-10-16","amount":20.0,"price":70.46},
+  {"etf":"gold","date":"2025-10-23","amount":20.0,"price":68.81},
+  {"etf":"gold","date":"2025-11-03","amount":20.0,"price":67.5},
+  {"etf":"gold","date":"2025-11-10","amount":20.0,"price":68.59},
+  {"etf":"gold","date":"2025-11-17","amount":20.0,"price":68.16},
+  {"etf":"gold","date":"2025-11-24","amount":20.0,"price":68.54},
+  {"etf":"gold","date":"2025-12-02","amount":20.0,"price":70.12},
+  {"etf":"gold","date":"2025-12-09","amount":20.0,"price":70.07},
+  {"etf":"gold","date":"2025-12-16","amount":20.0,"price":70.7},
+  {"etf":"gold","date":"2025-12-23","amount":20.0,"price":73.82},
+  {"etf":"gold","date":"2026-01-02","amount":17.0,"price":72.69},
+  {"etf":"gold","date":"2026-01-09","amount":17.0,"price":74.56},
+  {"etf":"gold","date":"2026-01-16","amount":17.0,"price":76.91},
+  {"etf":"gold","date":"2026-01-23","amount":17.0,"price":81.15},
+  {"etf":"gold","date":"2026-02-02","amount":28.0,"price":76.98},
+  {"etf":"gold","date":"2026-02-09","amount":28.0,"price":82.1},
+  {"etf":"gold","date":"2026-02-16","amount":19.0,"price":81.99},
+  {"etf":"gold","date":"2026-02-23","amount":19.0,"price":84.62},
+  {"etf":"gold","date":"2026-03-02","amount":16.0,"price":89.27},
+  {"etf":"gold","date":"2026-03-09","amount":16.0,"price":86.03},
+  {"etf":"gold","date":"2026-03-16","amount":20.0,"price":84.71},
+  {"etf":"gold","date":"2026-03-23","amount":20.0,"price":71.975},
+  {"etf":"gold","date":"2026-04-02","amount":28.0,"price":77.98},
+  {"etf":"gold","date":"2026-04-09","amount":28.0,"price":78.645},
+  {"etf":"gold","date":"2026-04-16","amount":72.0,"price":79.26},
+  {"etf":"gold","date":"2026-04-23","amount":72.0,"price":78.1},
+  {"etf":"gold","date":"2026-05-04","amount":60.0,"price":75.81},
+  {"etf":"gold","date":"2026-05-11","amount":60.0,"price":76.975},
+  {"etf":"gold","date":"2026-05-18","amount":51.0,"price":75.84},
+  {"etf":"gold","date":"2026-05-25","amount":51.0,"price":75.93},
+  {"etf":"gold","date":"2026-06-02","amount":43.0,"price":75.44},
+  {"etf":"gold","date":"2026-06-09","amount":43.0,"price":72.835},
+  {"etf":"gold","date":"2026-06-16","amount":30.0,"price":72.64},
+  {"etf":"gold","date":"2026-06-23","amount":30.0,"price":69.815},
+  {"etf":"silver","date":"2025-10-16","amount":10.0,"price":43.68},
+  {"etf":"silver","date":"2025-10-23","amount":10.0,"price":40.5},
+  {"etf":"silver","date":"2025-11-03","amount":13.62,"price":40.33},
+  {"etf":"silver","date":"2025-11-10","amount":10.0,"price":41.23},
+  {"etf":"silver","date":"2025-11-17","amount":10.0,"price":41.74},
+  {"etf":"silver","date":"2025-11-24","amount":10.0,"price":41.74},
+  {"etf":"silver","date":"2025-12-02","amount":12.7,"price":47.07},
+  {"etf":"silver","date":"2025-12-09","amount":10.0,"price":48.47},
+  {"etf":"silver","date":"2025-12-16","amount":30.0,"price":51.38},
+  {"etf":"silver","date":"2025-12-23","amount":30.0,"price":56.26},
+  {"etf":"silver","date":"2026-01-02","amount":13.99,"price":59.508},
+  {"etf":"silver","date":"2026-01-09","amount":10.0,"price":65.047},
+  {"etf":"silver","date":"2026-01-16","amount":10.0,"price":73.42},
+  {"etf":"silver","date":"2026-01-23","amount":10.0,"price":81.051},
+  {"etf":"silver","date":"2026-02-02","amount":49.0,"price":64.282},
+  {"etf":"silver","date":"2026-02-02","amount":7.18,"price":64.04},
+  {"etf":"silver","date":"2026-02-09","amount":49.0,"price":65.18},
+  {"etf":"silver","date":"2026-02-16","amount":25.0,"price":61.36},
+  {"etf":"silver","date":"2026-02-23","amount":25.0,"price":70.59},
+  {"etf":"silver","date":"2026-03-02","amount":25.61,"price":73.63},
+  {"etf":"silver","date":"2026-03-09","amount":20.0,"price":69.47},
+  {"etf":"silver","date":"2026-03-16","amount":20.0,"price":66.996},
+  {"etf":"silver","date":"2026-03-23","amount":20.0,"price":57.645},
+  {"etf":"silver","date":"2026-04-02","amount":5.0,"price":59.206},
+  {"etf":"silver","date":"2026-04-09","amount":5.0,"price":60.966},
+  {"etf":"silver","date":"2026-04-16","amount":2.0,"price":63.731},
+  {"etf":"silver","date":"2026-04-23","amount":2.0,"price":61.814},
+  {"etf":"silver","date":"2026-05-18","amount":5.0,"price":63.243},
+  {"etf":"silver","date":"2026-05-25","amount":5.0,"price":63.812},
+  {"etf":"silver","date":"2026-06-02","amount":6.0,"price":62.035},
+  {"etf":"silver","date":"2026-06-09","amount":6.0,"price":55.515},
+  {"etf":"nasdaq","date":"2025-01-02","amount":10.0,"price":1171.2},
+  {"etf":"nasdaq","date":"2025-01-09","amount":10.0,"price":1173.4},
+  {"etf":"nasdaq","date":"2025-01-16","amount":10.0,"price":1180.6},
+  {"etf":"nasdaq","date":"2025-01-23","amount":8.0,"price":1196.2},
+  {"etf":"nasdaq","date":"2025-02-03","amount":10.0,"price":1182.4},
+  {"etf":"nasdaq","date":"2025-02-10","amount":10.0,"price":1206.2},
+  {"etf":"nasdaq","date":"2025-02-17","amount":10.0,"price":1209.0},
+  {"etf":"nasdaq","date":"2025-03-03","amount":10.0,"price":1138.2},
+  {"etf":"nasdaq","date":"2025-03-10","amount":10.0,"price":1033.0},
+  {"etf":"nasdaq","date":"2025-03-17","amount":10.0,"price":1031.4},
+  {"etf":"nasdaq","date":"2025-03-24","amount":10.0,"price":1068.0},
+  {"etf":"nasdaq","date":"2025-04-02","amount":10.0,"price":1025.0},
+  {"etf":"nasdaq","date":"2025-04-16","amount":6.0,"price":1261.6},
+  {"etf":"nasdaq","date":"2025-04-23","amount":6.0,"price":1247.4},
+  {"etf":"nasdaq","date":"2025-12-16","amount":50.0,"price":1218.6},
+  {"etf":"nasdaq","date":"2025-12-23","amount":50.0,"price":1240.0},
+  {"etf":"nasdaq","date":"2026-01-16","amount":6.0,"price":1261.6},
+  {"etf":"nasdaq","date":"2026-01-23","amount":6.0,"price":1247.4},
+  {"etf":"nasdaq","date":"2026-02-02","amount":25.0,"price":1253.0},
+  {"etf":"nasdaq","date":"2026-02-09","amount":25.0,"price":1211.6},
+  {"etf":"nasdaq","date":"2026-02-16","amount":15.0,"price":1194.4},
+  {"etf":"nasdaq","date":"2026-02-23","amount":15.0,"price":1207.0},
+  {"etf":"nasdaq","date":"2026-03-02","amount":3.0,"price":1219.0},
+  {"etf":"nasdaq","date":"2026-03-16","amount":10.0,"price":1232.8},
+  {"etf":"nasdaq","date":"2026-04-02","amount":9.0,"price":1184.8},
+  {"etf":"nasdaq","date":"2026-04-09","amount":9.0,"price":1219.8},
+  {"etf":"nasdaq","date":"2026-05-16","amount":25.0,"price":1505.2},
+  {"etf":"nasdaq","date":"2026-05-23","amount":25.0,"price":1498.4},
+  {"etf":"defense","date":"2025-08-18","amount":10.0,"price":50.36},
+  {"etf":"defense","date":"2025-08-25","amount":10.0,"price":49.5},
+  {"etf":"defense","date":"2025-09-02","amount":13.24,"price":49.72},
+  {"etf":"defense","date":"2025-09-09","amount":10.0,"price":49.22},
+  {"etf":"defense","date":"2025-09-16","amount":10.0,"price":51.83},
+  {"etf":"defense","date":"2025-09-23","amount":10.0,"price":53.22},
+  {"etf":"defense","date":"2025-10-02","amount":10.0,"price":56.34},
+  {"etf":"defense","date":"2025-10-02","amount":3.08,"price":56.29},
+  {"etf":"defense","date":"2025-10-09","amount":10.0,"price":56.94},
+  {"etf":"defense","date":"2025-10-16","amount":10.0,"price":53.13},
+  {"etf":"defense","date":"2025-10-23","amount":10.0,"price":55.12},
+  {"etf":"defense","date":"2025-11-03","amount":10.0,"price":55.8},
+  {"etf":"defense","date":"2025-11-10","amount":10.0,"price":53.8},
+  {"etf":"defense","date":"2025-11-17","amount":10.0,"price":52.38},
+  {"etf":"defense","date":"2025-11-24","amount":10.0,"price":49.41},
+  {"etf":"defense","date":"2025-12-02","amount":10.0,"price":49.56},
+  {"etf":"defense","date":"2025-12-09","amount":10.0,"price":51.95},
+  {"etf":"defense","date":"2025-12-16","amount":20.0,"price":50.16},
+  {"etf":"defense","date":"2026-01-02","amount":4.0,"price":52.9},
+  {"etf":"defense","date":"2026-01-09","amount":4.0,"price":61.36},
+  {"etf":"defense","date":"2026-03-02","amount":7.0,"price":62.27},
+  {"etf":"defense","date":"2026-03-09","amount":7.0,"price":62.85},
+  {"etf":"defense","date":"2026-03-16","amount":13.0,"price":62.63},
+  {"etf":"defense","date":"2026-03-23","amount":13.0,"price":60.39},
+  {"etf":"defense","date":"2026-04-02","amount":2.0,"price":60.33},
+  {"etf":"defense","date":"2026-04-09","amount":3.0,"price":59.89},
+  {"etf":"defense","date":"2026-04-16","amount":4.0,"price":59.63},
+  {"etf":"defense","date":"2026-04-23","amount":4.0,"price":57.84},
+  {"etf":"defense","date":"2026-05-04","amount":4.0,"price":57.14},
+  {"etf":"defense","date":"2026-05-11","amount":4.0,"price":53.28},
+  {"etf":"defense","date":"2026-05-18","amount":4.0,"price":52.2},
+  {"etf":"defense","date":"2026-05-25","amount":4.0,"price":54.83},
+  {"etf":"defense","date":"2026-06-02","amount":5.0,"price":55.22},
+  {"etf":"defense","date":"2026-06-09","amount":5.0,"price":52.28},
+  {"etf":"platinum","date":"2026-01-02","amount":7.0,"price":25.95},
+  {"etf":"platinum","date":"2026-01-09","amount":7.0,"price":28.4},
+  {"etf":"platinum","date":"2026-01-16","amount":15.0,"price":28.94},
+  {"etf":"platinum","date":"2026-01-23","amount":15.0,"price":32.48},
+  {"etf":"platinum","date":"2026-02-02","amount":49.0,"price":24.5},
+  {"etf":"platinum","date":"2026-02-09","amount":49.0,"price":25.39},
+  {"etf":"platinum","date":"2026-02-16","amount":36.0,"price":24.73},
+  {"etf":"platinum","date":"2026-02-23","amount":36.0,"price":26.52},
+  {"etf":"platinum","date":"2026-03-02","amount":16.0,"price":28.919},
+  {"etf":"platinum","date":"2026-03-09","amount":16.0,"price":26.261},
+  {"etf":"platinum","date":"2026-03-16","amount":5.0,"price":25.79},
+  {"etf":"platinum","date":"2026-03-23","amount":5.0,"price":22.435},
+  {"etf":"asia","date":"2026-01-02","amount":10.0,"price":208.1},
+  {"etf":"asia","date":"2026-01-09","amount":10.0,"price":212.95},
+  {"etf":"asia","date":"2026-01-16","amount":15.0,"price":216.35},
+  {"etf":"asia","date":"2026-01-23","amount":15.0,"price":215.4},
+  {"etf":"asia","date":"2026-02-02","amount":62.0,"price":215.8},
+  {"etf":"asia","date":"2026-02-09","amount":62.0,"price":219.75},
+  {"etf":"asia","date":"2026-02-16","amount":20.0,"price":223.95},
+  {"etf":"asia","date":"2026-02-23","amount":20.0,"price":228.1},
+  {"etf":"asia","date":"2026-03-02","amount":16.0,"price":227.65},
+  {"etf":"asia","date":"2026-03-09","amount":16.0,"price":214.8},
+  {"etf":"asia","date":"2026-03-16","amount":10.0,"price":222.0},
+  {"etf":"asia","date":"2026-03-23","amount":10.0,"price":216.85},
+  {"etf":"asia","date":"2026-04-02","amount":11.0,"price":209.45},
+  {"etf":"asia","date":"2026-04-09","amount":11.0,"price":221.15},
+  {"etf":"asia","date":"2026-04-16","amount":21.0,"price":230.45},
+  {"etf":"asia","date":"2026-04-23","amount":21.0,"price":234.9},
+  {"etf":"asia","date":"2026-05-04","amount":19.0,"price":244.95},
+  {"etf":"asia","date":"2026-05-11","amount":19.0,"price":256.6},
+  {"etf":"asia","date":"2026-05-18","amount":16.0,"price":249.75},
+  {"etf":"asia","date":"2026-05-25","amount":16.0,"price":259.75},
+  {"etf":"asia","date":"2026-06-02","amount":14.0,"price":274.3},
+  {"etf":"asia","date":"2026-06-09","amount":14.0,"price":258.0},
+  {"etf":"asia","date":"2026-06-16","amount":14.0,"price":269.85},
+  {"etf":"asia","date":"2026-06-23","amount":14.0,"price":271.25}
+];
 
 const DEFAULT_REMUN_YEARS = {
   '2024': {mode:'yearly', total:7.84, cashback:0},
@@ -649,6 +1024,7 @@ let filterEtf = 'all';
 let dateFrom = '';
 let dateTo = '';
 let selectedAnnualYear = '';
+const SWATCH_COLORS = ['#3b82f6','#22c55e','#f59e0b','#94a3b8','#a855f7','#ef4444','#e2e8f0','#f97316','#14b8a6','#ec4899','#84cc16','#6366f1'];
 let newEtfColor = SWATCH_COLORS[0];
 let dataLoaded = false;
 let openCardId = null;
@@ -663,23 +1039,6 @@ function applyTheme(t){
   if(btn) btn.textContent = t === 'light' ? '\u25D1' : '\u25D0';
 }
 
-// ─── CONFIGURACIÓN BACKEND (Google Apps Script) ──────────────────────────────
-// ⚠ Cuando tengas la URL de tu Apps Script, pégala aquí:
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbysWMM7Lq35_8NdKEVq7PFi2S3AMJjpTAjCsy-H49GXELoH17KZj9_o6PJDZ1pNOubr/exec';
-
-async function gasGet(key) {
-  try {
-    const r = await fetch(`${GAS_URL}?key=${encodeURIComponent(key)}`);
-    const j = await r.json();
-    return (j.value !== null && j.value !== undefined) ? j.value : null;
-  } catch(e) { return null; }
-}
-async function gasSet(key, value) {
-  try { await fetch(GAS_URL, {method:'POST', body:JSON.stringify({key, value})}); } catch(e) {}
-}
-function lsGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
-function lsSet(key, v) { try { localStorage.setItem(key, v); } catch(e) {} }
-
 async function loadTheme(){
   applyTheme(localStorage.getItem('tr_theme') || 'dark');
 }
@@ -691,7 +1050,7 @@ async function toggleTheme(){
 }
 
 async function loadData(){
-  const keys = [
+  const DATA_KEYS = [
     ['tr_etfs',         v=>{ etfs = JSON.parse(v); }],
     ['tr_prices',       v=>{ prices = {...DEFAULT_PRICES, ...JSON.parse(v)}; }],
     ['tr_aportaciones', v=>{ aportaciones = JSON.parse(v); }],
@@ -701,24 +1060,44 @@ async function loadData(){
     ['tr_snapshots',    v=>{ snapshots = JSON.parse(v); }],
     ['tr_objetivos',    v=>{ objetivos = JSON.parse(v); }],
   ];
-  const online = typeof GAS_URL !== 'undefined' && GAS_URL !== 'TU_URL_AQUI';
-  for (const [key, apply] of keys) {
-    let val = null;
-    if (online) { val = await gasGet(key); if(val) lsSet(key, val); }
-    if (!val) val = lsGet(key);
-    try { if(val) apply(val); } catch(e) { console.warn('parse error', key, e); }
+  // Carga local instantánea
+  for(const [key, apply] of DATA_KEYS){
+    const val = lsGet(key);
+    try{ if(val) apply(val); }catch(e){}
   }
   dataLoaded = true;
+  // Sync GAS en background
+  if(GAS_URL !== 'TU_URL_AQUI'){
+    Promise.all(DATA_KEYS.map(([key])=>gasGet(key).then(val=>[key,val,DATA_KEYS.find(([k])=>k===key)?.[1]])))
+      .then(results=>{
+        let changed=false;
+        results.forEach(([key,val,apply])=>{ if(val){ lsSet(key,val); try{ apply(val); changed=true; }catch(e){} } });
+        if(changed) renderAll();
+      }).catch(()=>{});
+  }
 }
 
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
+// ── BACKEND GAS ──────────────────────────────────────────────────────────────
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbysWMM7Lq35_8NdKEVq7PFi2S3AMJjpTAjCsy-H49GXELoH17KZj9_o6PJDZ1pNOubr/exec';
+async function gasGet(key){
+  try{
+    const r = await fetch(`${GAS_URL}?key=${encodeURIComponent(key)}`);
+    const j = await r.json();
+    return (j.value !== null && j.value !== undefined) ? j.value : null;
+  }catch(e){ return null; }
+}
+async function gasSet(key, value){
+  try{ await fetch(GAS_URL, {method:'POST', body:JSON.stringify({key, value})}); }catch(e){}
+}
+function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function lsSet(key, v){ try{ localStorage.setItem(key, v); }catch(e){} }
+
 async function persist(key, val){
   const data = JSON.stringify(val);
-  lsSet(key, data); // local inmediato
-  if (typeof GAS_URL !== 'undefined' && GAS_URL !== 'TU_URL_AQUI') {
-    gasSet(key, data); // cloud en background, no await para no bloquear
-  }
+  lsSet(key, data);
+  if(GAS_URL !== 'TU_URL_AQUI') gasSet(key, data);
   return true;
 }
 const persistEtfs = () => persist('tr_etfs', etfs);
@@ -767,11 +1146,16 @@ function positionFor(id){
   return { shares: Math.max(shares,0), invested: Math.max(invested,0), realizedPL, soldProceeds };
 }
 
+// Precios medios exactos del Excel
+const EXACT_AVG_PRICES = {"msci":105.330,"sp500":575.72,"gold":69.77,"silver":57.52,"nasdaq":1221.08,"defense":53.96,"platinum":25.67,"asia":229.70};
+const EXACT_SHARES = {"msci":54.447705,"sp500":2.716621,"gold":18.930974,"silver":8.03831,"nasdaq":0.330035,"defense":5.084142,"platinum":9.81826,"asia":1.985184};
+
 function avgBuyPrice(id){
+  if(EXACT_AVG_PRICES[id] !== undefined) return EXACT_AVG_PRICES[id];
   const buys = buysFor(id);
   if(buys.length===0) return 0;
   let totalShares=0, totalCost=0;
-  buys.forEach(b=>{ totalShares += b.amount/b.price; totalCost += b.amount; });
+  buys.forEach(b=>{ const sh=b.amount/b.price; totalShares+=sh; totalCost+=b.amount; });
   return totalShares>0 ? totalCost/totalShares : 0;
 }
 
@@ -2092,14 +2476,65 @@ function syncStickyOffset(){
   }
 }
 
+async function runStorageTest(){
+  const div = document.getElementById('storage-diag');
+  if(!div) return;
+  div.innerHTML = 'Probando...';
+  const lines = [];
+
+  // Test 1: ¿existe window.storage?
+  lines.push('window.storage existe: ' + (!!window.storage));
+  if(!window.storage){ div.innerHTML = lines.join('<br>'); return; }
+  lines.push('typeof get: ' + typeof window.storage.get);
+  lines.push('typeof set: ' + typeof window.storage.set);
+
+  // Test 2: escritura simple
+  try{
+    await window.storage.set('tr_diag_test', JSON.stringify({t: Date.now()}), false);
+    lines.push('SET simple: OK');
+  }catch(e){
+    lines.push('SET simple ERROR: ' + e.message);
+  }
+
+  // Test 3: lectura
+  try{
+    const r = await window.storage.get('tr_diag_test', false);
+    lines.push('GET tras SET: ' + JSON.stringify(r));
+  }catch(e){
+    lines.push('GET ERROR: ' + e.message);
+  }
+
+  // Test 4: escritura del dato problemático (etfs)
+  try{
+    await window.storage.set('tr_etfs', JSON.stringify(etfs), true);
+    lines.push('SET tr_etfs (' + JSON.stringify(etfs).length + ' bytes): OK');
+  }catch(e){
+    lines.push('SET tr_etfs ERROR: ' + e.message);
+  }
+
+  // Test 5: escritura ventas vacías
+  try{
+    await window.storage.set('tr_ventas', '[]', true);
+    lines.push('SET tr_ventas ([]) : OK');
+  }catch(e){
+    lines.push('SET tr_ventas ERROR: ' + e.message);
+  }
+
+  div.innerHTML = lines.map(l => `<div style="padding:2px 0;font-family:monospace;font-size:12px;">${l}</div>`).join('');
+}
+
+
 
 (async function init(){
   await loadTheme();
   await loadData();
-  renderAll();
+  const lo=document.getElementById('resumen-loading');
+  const rb=document.getElementById('resumen-body');
+  try{ renderAll(); }catch(e){ console.error('renderAll:',e); }
+  if(lo) lo.style.display='none';
+  if(rb) rb.style.display='';
   syncStickyOffset();
   window.addEventListener('resize', syncStickyOffset);
-  // Auto-guardar snapshot del día al cargar (silencioso)
   setTimeout(autoSnapshot, 2000);
 })();
 </script>
