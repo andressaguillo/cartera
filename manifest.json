@@ -2,15 +2,15 @@
   "name": "Cartera de inversión",
   "short_name": "Cartera",
   "description": "Dashboard personal de inversión",
-  "start_url": "/cartera/cartera.html",
+  "start_url": "/cartera/",
   "scope": "/cartera/",
   "display": "standalone",
-  "background_color": "#0f0f0f",
+  "background_color": "#ffffff",
   "theme_color": "#1e3a8a",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://andressaguillo.github.io/cartera/icon-192.png",
+      "src": "icono-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
