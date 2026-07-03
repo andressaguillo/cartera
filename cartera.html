@@ -18,7 +18,7 @@
   --text:#f0f0f0;--text2:#aaa;--text3:#666;
   --green:#22c55e;--red:#ef4444;--amber:#f59e0b;--blue:#3b82f6;
   --radius:12px;--radius-sm:8px;
-  --serif:'Georgia','Iowan Old Style','Times New Roman',serif;
+  --serif:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
   --header-grad:linear-gradient(120deg,#1e3a8a 0%,#1d4ed8 45%,#0891b2 100%);
   --header-text:#f5f7ff;
   --header-text2:#c7d2fe;
@@ -42,6 +42,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .header-eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--header-text2);margin-bottom:5px;opacity:.85;}
 .header-title{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--header-text);letter-spacing:.01em;}
 .header-sub{font-size:15px;color:var(--header-text2);margin-top:7px;}
+.header-sub strong{color:inherit;}
 .last-update{font-size:13px;color:var(--header-text2);margin-top:3px;opacity:.75;}
 .theme-toggle{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--header-border);background:rgba(255,255,255,.12);color:var(--header-text);cursor:pointer;font-size:17px;}
 .theme-toggle:active{opacity:.7;}
@@ -147,7 +148,9 @@ svg.donut{width:160px;height:160px;}
 .toast.error{background:var(--red);color:#fff;}
 [data-theme="light"] .toast{color:#fff;}
 
-.loading-overlay{display:flex;align-items:center;justify-content:center;padding:60px 20px;color:var(--text3);font-size:15px;}
+.loading-overlay{display:flex;align-items:center;justify-content:center;padding:60px 20px;background:var(--header-grad);color:var(--text3);font-size:15px;}
+@keyframes loadbar{0%{width:0%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0%;margin-left:100%}}
+
 
 .section-divider{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin:24px 0 10px;padding-top:4px;}
 
@@ -330,7 +333,28 @@ details[open] > summary::before{transform:rotate(90deg);}
 
 <!-- RESUMEN -->
 <div id="page-resumen">
-  <div id="resumen-loading" class="loading-overlay">Cargando datos guardados...</div>
+  <div id="resumen-loading" class="loading-overlay">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+    <svg width="64" height="64" viewBox="0 0 192 192" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.3);">
+      <rect width="192" height="192" rx="38" fill="#ffffff"/>
+      <rect x="22" y="118" width="26" height="52" rx="5" fill="#dbeafe"/>
+      <rect x="56" y="95" width="26" height="75" rx="5" fill="#93c5fd"/>
+      <rect x="90" y="75" width="26" height="95" rx="5" fill="#3b82f6"/>
+      <rect x="124" y="52" width="26" height="118" rx="5" fill="#1d4ed8"/>
+      <polyline points="35,112 69,89 103,69 137,46" fill="none" stroke="#1e3a8a" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="35" cy="112" r="5" fill="#1e3a8a"/>
+      <circle cx="69" cy="89" r="5" fill="#1e3a8a"/>
+      <circle cx="103" cy="69" r="5" fill="#1e3a8a"/>
+      <circle cx="137" cy="46" r="5" fill="#1e3a8a"/>
+      <line x1="137" y1="46" x2="162" y2="28" stroke="#22c55e" stroke-width="4.5" stroke-linecap="round"/>
+      <polygon points="155,22 170,22 170,37" fill="#22c55e"/>
+    </svg>
+    <div style="font-size:16px;color:rgba(255,255,255,0.8);font-family:-apple-system,sans-serif;">Cargando cartera...</div>
+    <div style="width:120px;height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;">
+      <div style="height:100%;background:#22c55e;border-radius:2px;animation:loadbar 1.5s ease-in-out infinite;"></div>
+    </div>
+  </div>
+</div>
   <div id="resumen-body" style="display:none;">
     <div class="kpi-grid" id="kpi-main"></div>
     <div class="two-col-charts">
@@ -1189,6 +1213,27 @@ function showToast(msg,isError){
   setTimeout(()=>t.classList.remove('show'),2200);
 }
 
+
+// Animación de contador para KPIs
+function animateValue(el, from, to, duration=600){
+  if(!el) return;
+  const start = performance.now();
+  const isNeg = to < 0;
+  const abs = Math.abs(to);
+  const fromAbs = Math.abs(from);
+  requestAnimationFrame(function step(now){
+    const progress = Math.min((now-start)/duration, 1);
+    const ease = 1 - Math.pow(1-progress, 3); // ease-out cubic
+    const current = fromAbs + (abs-fromAbs)*ease;
+    const sign = isNeg ? '-' : (to>0?'+':'');
+    // Mantener el formato original del elemento
+    const fmt2 = el.dataset.fmt;
+    if(fmt2==='pct') el.textContent = (isNeg?'-':'')+fmt(current,2)+'%';
+    else el.textContent = (isNeg?'-':sign)+fmtE(current);
+    if(progress<1) requestAnimationFrame(step);
+  });
+}
+
 function renderResumen(){
   const tot=totalCartera();
   const gain=tot.current-tot.inv;
@@ -1204,7 +1249,10 @@ function renderResumen(){
   // Orden de mayor a menor ponderación (valor actual) para donut, leyenda y barras
   list = [...list].sort((a,b)=>calcETF(b.id).current - calcETF(a.id).current);
 
-  document.getElementById('header-sub').textContent=`Total: ${fmtE(tot.current)} \u00b7 Ganancia: ${gain>=0?'+':''}${fmtE(gain)}`;
+  const gainColor = gain>=0 ? 'var(--green)' : 'var(--red)';
+  const gainSign  = gain>=0 ? '+' : '';
+  document.getElementById('header-sub').innerHTML =
+    `Total: <strong>${fmtE(tot.current)}</strong> &nbsp;·&nbsp; Ganancia: <strong style="color:${gainColor};font-weight:800;">${gainSign}${fmtE(gain)}</strong>`;
   document.getElementById('last-update').textContent=new Date().toLocaleDateString('es-ES');
 
   document.getElementById('kpi-main').innerHTML=`
@@ -1562,26 +1610,51 @@ function renderPrecios(){
   const rows=document.getElementById('price-rows');
   rows.innerHTML=activeEtfs().map(etf=>{
     const cur=getPrice(etf.id);
+    const prev=prices[etf.id+'_prev'];
+    const diff=prev!==undefined ? cur-prev : null;
+    const diffHtml = diff!==null && diff!==0
+      ? `<span style="font-size:12px;font-weight:700;color:${diff>0?'var(--green)':'var(--red)'};">${diff>0?'▲':'▼'} ${fmt(Math.abs(diff),2)}€</span>`
+      : '';
     return `<div class="price-row">
-      <label>${etf.name}</label>
-      <input class="price-input" type="number" step="0.01" id="p-${etf.id}" value="${fmt(cur,2)}" placeholder="0.00">
+      <label style="display:flex;align-items:center;gap:8px;">${etf.name} ${diffHtml}</label>
+      <input class="price-input" type="number" step="0.01" id="p-${etf.id}"
+        value="${fmt(cur,2)}" placeholder="0.00"
+        onchange="autoSavePrice('${etf.id}',this.value)"
+        onblur="autoSavePrice('${etf.id}',this.value)">
     </div>`;
   }).join('') || '<div style="font-size:14px;color:var(--text3);">Sin activos</div>';
 }
 
+async function autoSavePrice(id, val){
+  const v = parseFloat(val);
+  if(isNaN(v) || v < 0) return;
+  if(prices[id] === v) return; // sin cambios
+  prices[id+'_prev'] = prices[id]; // guardar anterior para mostrar diff
+  prices[id] = v;
+  await persistPricesFn();
+  renderResumen(); // actualizar cabecera y resumen al instante
+  // Actualizar el diff visual en el input sin re-renderizar todo
+  const etf = etfs.find(e=>e.id===id);
+  if(!etf) return;
+  const diff = v - (prices[id+'_prev']||v);
+  const label = document.querySelector(`#p-${id}`)?.closest('.price-row')?.querySelector('label');
+  if(label && diff!==0){
+    const span = label.querySelector('span') || document.createElement('span');
+    span.style.cssText=`font-size:12px;font-weight:700;color:${diff>0?'var(--green)':'var(--red)'};`;
+    span.textContent=`${diff>0?'▲':'▼'} ${fmt(Math.abs(diff),2)}€`;
+    if(!label.querySelector('span')) label.appendChild(span);
+  }
+}
+
 async function savePrices(){
-  const btn=document.getElementById('save-prices-btn');
+  // Guardar todos a la vez (por si el usuario prefiere pulsar el botón)
   activeEtfs().forEach(etf=>{
     const input = document.getElementById(`p-${etf.id}`);
     if(!input) return;
     const v=parseFloat(input.value);
-    if(!isNaN(v)&&v>=0) prices[etf.id]=v;
+    if(!isNaN(v)&&v>=0){ prices[etf.id+'_prev']=prices[etf.id]; prices[etf.id]=v; }
   });
-  btn.disabled=true;
-  btn.textContent='Guardando...';
-  const ok=await persistPricesFn();
-  btn.disabled=false;
-  btn.textContent='Guardar precios';
+  await persistPricesFn();
   showToast('\u2713 Precios actualizados');
   renderAll();
 }
