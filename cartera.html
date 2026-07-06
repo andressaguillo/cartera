@@ -1104,7 +1104,7 @@ async function loadData(){
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ── BACKEND GAS ──────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbysWMM7Lq35_8NdKEVq7PFi2S3AMJjpTAjCsy-H49GXELoH17KZj9_o6PJDZ1pNOubr/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxKTEAjLO6YxnuiItNHY6ZM5Ya-R_dnwQgt47f1KIukGM9foIEQGX3uY9lBZW1ACmG6/exec';
 async function gasGet(key){
   try{
     const r = await fetch(`${GAS_URL}?key=${encodeURIComponent(key)}`);
