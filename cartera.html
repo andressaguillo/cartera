@@ -505,7 +505,7 @@ details[open] > summary::before{transform:rotate(90deg);}
     <div class="history-wrap">
       <table class="history-table">
         <thead>
-          <tr><th>Fecha</th><th>Activo</th><th>Importe</th><th>Precio</th><th>Rent.</th><th></th></tr>
+          <tr><th>Fecha</th><th>Activo</th><th>Importe</th><th>Precio compra</th><th>Acciones</th><th>Rent.</th><th></th></tr>
         </thead>
         <tbody id="history-tbody"></tbody>
       </table>
@@ -1841,18 +1841,20 @@ function renderAportaciones(){
 
   const tbody=document.getElementById('history-tbody');
   if(sorted.length===0){
-    tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:20px;">Sin aportaciones en este rango</td></tr>`;
+    tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px;">Sin aportaciones en este rango</td></tr>`;
     return;
   }
   tbody.innerHTML=sorted.map((a)=>{
     const etf=etfs.find(e=>e.id===a.etf);
     const curPrice=getPrice(a.etf);
     const rent=((curPrice-a.price)/a.price)*100;
+    const shares=a.price>0?a.amount/a.price:0;
     return `<tr>
       <td>${a.date}</td>
       <td style="color:${etf?.color||'inherit'}">${etf?.name||a.etf}</td>
       <td>${fmtE(a.amount)}</td>
       <td>${fmt(a.price,3)}</td>
+      <td style="color:var(--text2);font-size:12px;">${fmt(shares,6)}</td>
       <td class="${cls(rent)}">${fmtP(rent)}</td>
       <td><button class="del-btn" onclick="deleteAportacion(${aportaciones.indexOf(a)})">\u2715</button></td>
     </tr>`;
