@@ -1108,7 +1108,7 @@ async function loadData(){
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ── BACKEND GAS ──────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyWwY7jjq8gBqlJu24gYbyNJk1MuOs3h-dFZiN6-rVD2n5jF6AkjYAepOVXyjic_h00/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzPqiXQE8yNRpjoi33E17s4TN6R10Ve924JIDgRqiUK2Ac-Po4AhZ7jFIabnJFrxBr6/exec';
 async function gasGet(key){
   try{
     const ctrl=new AbortController();
@@ -1121,11 +1121,12 @@ async function gasGet(key){
 }
 async function gasSet(key,value){
   try{
-    // Usar FormData — evita preflight CORS con Google Apps Script
-    const form = new FormData();
-    form.append('key', key);
-    form.append('value', value);
-    await fetch(GAS_URL, {method:'POST', body: form});
+    // Usar GET con parámetros — no tiene restricciones CORS
+    const url = `${GAS_URL}?action=set&key=${encodeURIComponent(key)}&value=${encodeURIComponent(value)}`;
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 10000);
+    await fetch(url, {signal: ctrl.signal});
+    clearTimeout(t);
   }catch(e){console.warn('gasSet:',key,e.message);}
 }
 async function pushAllToGAS(){
