@@ -313,6 +313,8 @@ details[open] > summary::before{transform:rotate(90deg);}
       <div class="last-update" id="last-update">—</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
+      <button class="theme-toggle" onclick="pushAllToGAS()" title="Subir datos a la nube" style="font-size:15px;width:36px;padding:0;">↑</button>
+      <button class="theme-toggle" onclick="pullAllFromGAS()" title="Descargar datos de la nube" style="font-size:15px;width:36px;padding:0;">↓</button>
       <button class="theme-toggle" id="demo-toggle-btn" onclick="toggleDemo()" title="Vista demo para compartir" style="font-size:11px;width:auto;padding:0 10px;border-radius:20px;letter-spacing:.05em;white-space:nowrap;">DEMO</button>
       <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Cambiar tema" title="Cambiar entre modo claro y oscuro">◐</button>
     </div>
@@ -1104,17 +1106,47 @@ async function loadData(){
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ── BACKEND GAS ──────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxKTEAjLO6YxnuiItNHY6ZM5Ya-R_dnwQgt47f1KIukGM9foIEQGX3uY9lBZW1ACmG6/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbysWMM7Lq35_8NdKEVq7PFi2S3AMJjpTAjCsy-H49GXELoH17KZj9_o6PJDZ1pNOubr/exec';
 async function gasGet(key){
   try{
-    const r = await fetch(`${GAS_URL}?key=${encodeURIComponent(key)}`);
-    const j = await r.json();
-    return (j.value !== null && j.value !== undefined) ? j.value : null;
-  }catch(e){ return null; }
+    const ctrl=new AbortController();
+    const t=setTimeout(()=>ctrl.abort(),8000);
+    const r=await fetch(`${GAS_URL}?key=${encodeURIComponent(key)}`,{signal:ctrl.signal});
+    clearTimeout(t);
+    const j=await r.json();
+    return (j.value!==null&&j.value!==undefined)?j.value:null;
+  }catch(e){console.warn('gasGet:',key,e.message);return null;}
 }
-async function gasSet(key, value){
-  try{ await fetch(GAS_URL, {method:'POST', body:JSON.stringify({key, value})}); }catch(e){}
+async function gasSet(key,value){
+  try{
+    const ctrl=new AbortController();
+    const t=setTimeout(()=>ctrl.abort(),8000);
+    await fetch(GAS_URL,{method:'POST',body:JSON.stringify({key,value}),signal:ctrl.signal});
+    clearTimeout(t);
+  }catch(e){console.warn('gasSet:',key,e.message);}
 }
+async function pushAllToGAS(){
+  if(GAS_URL==='TU_URL_AQUI')return;
+  showToast('Subiendo datos a la nube...');
+  try{
+    await Promise.all(DATA_KEYS.map(([key])=>{const v=lsGet(key);if(v)return gasSet(key,v);}).filter(Boolean));
+    showToast('\u2713 Datos subidos correctamente');
+  }catch(e){showToast('\u26a0 Error al subir',true);}
+}
+async function pullAllFromGAS(){
+  if(GAS_URL==='TU_URL_AQUI')return;
+  showToast('Descargando datos de la nube...');
+  try{
+    const results=await Promise.all(DATA_KEYS.map(([key])=>gasGet(key).then(val=>[key,val])));
+    let changed=false;
+    for(const [key,val] of results){
+      if(val){lsSet(key,val);const entry=DATA_KEYS.find(([k])=>k===key);try{if(entry){entry[1](val);changed=true;}}catch(e){}}
+    }
+    if(changed){renderAll();showToast('\u2713 Datos actualizados desde la nube');}
+    else showToast('Sin cambios en la nube');
+  }catch(e){showToast('\u26a0 Error al descargar',true);}
+}
+
 function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
 function lsSet(key, v){ try{ localStorage.setItem(key, v); }catch(e){} }
 
