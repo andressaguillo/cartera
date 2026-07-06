@@ -315,8 +315,9 @@ details[open] > summary::before{transform:rotate(90deg);}
       <div class="last-update" id="last-update">—</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
-      <button class="theme-toggle" onclick="pushAllToGAS()" title="Subir datos a la nube" style="font-size:15px;width:36px;padding:0;">↑</button>
-      <button class="theme-toggle" onclick="pullAllFromGAS()" title="Descargar datos de la nube" style="font-size:15px;width:36px;padding:0;">↓</button>
+      <button class="theme-toggle" onclick="exportarDatos()" title="Exportar datos a fichero" style="font-size:11px;width:auto;padding:0 8px;border-radius:20px;white-space:nowrap;">↓ Export</button>
+      <button class="theme-toggle" onclick="document.getElementById('import-input').click()" title="Importar datos desde fichero" style="font-size:11px;width:auto;padding:0 8px;border-radius:20px;white-space:nowrap;">↑ Import</button>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importarDatos(this)">
       <button class="theme-toggle" id="demo-toggle-btn" onclick="toggleDemo()" title="Vista demo para compartir" style="font-size:11px;width:auto;padding:0 10px;border-radius:20px;letter-spacing:.05em;white-space:nowrap;">DEMO</button>
       <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Cambiar tema" title="Cambiar entre modo claro y oscuro">◐</button>
     </div>
@@ -1108,7 +1109,7 @@ async function loadData(){
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ── BACKEND GAS ──────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwWIHnKSOqxhISzeZ-HAUFb0Gtu_fhHnLSTPlzbGbxXo61atvlWhbiZS9X9dTM0z_SB/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxrr6UJbBUVidR3BBBxanlzldWujE4kXSBtus00AV0IXgICXppbqoKi29S_ASuI0GqX/exec';
 async function gasGet(key){
   try{
     const ctrl=new AbortController();
@@ -2666,6 +2667,48 @@ async function runStorageTest(){
 }
 
 
+
+// ─── EXPORTAR / IMPORTAR ─────────────────────────────────────────────────────
+function exportarDatos(){
+  const data = {
+    etfs, prices, aportaciones, ventas,
+    remunYears, sp500History, snapshots, objetivos,
+    exportDate: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cartera_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('\u2713 Datos exportados');
+}
+
+function importarDatos(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try{
+      const data = JSON.parse(e.target.result);
+      if(data.etfs)         { etfs = data.etfs;               lsSet('tr_etfs', JSON.stringify(etfs)); }
+      if(data.prices)       { prices = {...DEFAULT_PRICES, ...data.prices}; lsSet('tr_prices', JSON.stringify(prices)); }
+      if(data.aportaciones) { aportaciones = data.aportaciones; lsSet('tr_aportaciones', JSON.stringify(aportaciones)); }
+      if(data.ventas)       { ventas = data.ventas;             lsSet('tr_ventas', JSON.stringify(ventas)); }
+      if(data.remunYears)   { remunYears = data.remunYears;     lsSet('tr_remun_years', JSON.stringify(remunYears)); }
+      if(data.sp500History) { sp500History = data.sp500History; lsSet('tr_sp500', JSON.stringify(sp500History)); }
+      if(data.snapshots)    { snapshots = data.snapshots;       lsSet('tr_snapshots', JSON.stringify(snapshots)); }
+      if(data.objetivos)    { objetivos = data.objetivos;       lsSet('tr_objetivos', JSON.stringify(objetivos)); }
+      renderAll();
+      showToast('\u2713 Datos importados correctamente');
+    }catch(err){
+      showToast('\u26a0 Error al importar: fichero no válido', true);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
 
 (async function init(){
   await loadTheme();
