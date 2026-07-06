@@ -1108,7 +1108,7 @@ async function loadData(){
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ── BACKEND GAS ──────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbysWMM7Lq35_8NdKEVq7PFi2S3AMJjpTAjCsy-H49GXELoH17KZj9_o6PJDZ1pNOubr/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyWwY7jjq8gBqlJu24gYbyNJk1MuOs3h-dFZiN6-rVD2n5jF6AkjYAepOVXyjic_h00/exec';
 async function gasGet(key){
   try{
     const ctrl=new AbortController();
@@ -1121,14 +1121,11 @@ async function gasGet(key){
 }
 async function gasSet(key,value){
   try{
-    // Usar no-cors para evitar bloqueo CORS desde GitHub Pages
-    // El script recibe los datos aunque no podamos leer la respuesta
-    await fetch(GAS_URL,{
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({key,value})
-    });
+    // Usar FormData — evita preflight CORS con Google Apps Script
+    const form = new FormData();
+    form.append('key', key);
+    form.append('value', value);
+    await fetch(GAS_URL, {method:'POST', body: form});
   }catch(e){console.warn('gasSet:',key,e.message);}
 }
 async function pushAllToGAS(){
