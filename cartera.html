@@ -1108,7 +1108,7 @@ async function loadData(){
 function wait(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ── BACKEND GAS ──────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzPqiXQE8yNRpjoi33E17s4TN6R10Ve924JIDgRqiUK2Ac-Po4AhZ7jFIabnJFrxBr6/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwWIHnKSOqxhISzeZ-HAUFb0Gtu_fhHnLSTPlzbGbxXo61atvlWhbiZS9X9dTM0z_SB/exec';
 async function gasGet(key){
   try{
     const ctrl=new AbortController();
@@ -1119,15 +1119,46 @@ async function gasGet(key){
     return (j.value!==null&&j.value!==undefined)?j.value:null;
   }catch(e){console.warn('gasGet:',key,e.message);return null;}
 }
-async function gasSet(key,value){
-  try{
-    // Usar GET con parámetros — no tiene restricciones CORS
-    const url = `${GAS_URL}?action=set&key=${encodeURIComponent(key)}&value=${encodeURIComponent(value)}`;
-    const ctrl = new AbortController();
-    const t = setTimeout(()=>ctrl.abort(), 10000);
-    await fetch(url, {signal: ctrl.signal});
-    clearTimeout(t);
-  }catch(e){console.warn('gasSet:',key,e.message);}
+function gasSet(key, value){
+  return new Promise((resolve) => {
+    try {
+      // Usar iframe oculto para POST sin restricciones CORS
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GAS_URL;
+      form.target = '_gas_iframe_';
+      form.style.display = 'none';
+
+      const addField = (name, val) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = val;
+        form.appendChild(input);
+      };
+      addField('key', key);
+      addField('value', value);
+
+      let iframe = document.getElementById('_gas_iframe_');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.name = '_gas_iframe_';
+        iframe.id = '_gas_iframe_';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+      setTimeout(() => {
+        form.remove();
+        resolve(true);
+      }, 500);
+    } catch(e) {
+      console.warn('gasSet:', key, e.message);
+      resolve(false);
+    }
+  });
 }
 async function pushAllToGAS(){
   if(GAS_URL==='TU_URL_AQUI')return;
