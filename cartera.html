@@ -1121,10 +1121,14 @@ async function gasGet(key){
 }
 async function gasSet(key,value){
   try{
-    const ctrl=new AbortController();
-    const t=setTimeout(()=>ctrl.abort(),8000);
-    await fetch(GAS_URL,{method:'POST',body:JSON.stringify({key,value}),signal:ctrl.signal});
-    clearTimeout(t);
+    // Usar no-cors para evitar bloqueo CORS desde GitHub Pages
+    // El script recibe los datos aunque no podamos leer la respuesta
+    await fetch(GAS_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({key,value})
+    });
   }catch(e){console.warn('gasSet:',key,e.message);}
 }
 async function pushAllToGAS(){
