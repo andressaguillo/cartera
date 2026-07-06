@@ -246,9 +246,11 @@ details[open] > summary::before{transform:rotate(90deg);}
   .tab{padding:14px 14px;font-size:14px;}
   /* Botones de acción más grandes */
   .detail-actions button{padding:10px;font-size:13px;}
-  /* Ocultar columna menos importante en tablas pequeñas */
-  .history-table td:nth-child(4),
-  .history-table th:nth-child(4){display:none;}
+  /* En móvil pequeño ocultar columna Acciones (5ª) */
+  .history-table td:nth-child(5),
+  .history-table th:nth-child(5){display:none;}
+  /* Reducir padding de tabla en móvil */
+  .history-table td, .history-table th{padding:7px 6px;font-size:12px;}
 }
 
 @media(min-width:421px) and (max-width:639px){
